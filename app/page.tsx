@@ -41,7 +41,7 @@ export default function DiceGame() {
 
   const addScore = (playerIndex: number) => {
     const newScores = [...scores]
-    if (newScores[playerIndex] < 12) { // Asumo límite 12 según tu código anterior
+    if (newScores[playerIndex] < 8) { // Asumo límite 12 según tu código anterior
       newScores[playerIndex] += 1
     }
     setScores(newScores)
@@ -153,7 +153,7 @@ export default function DiceGame() {
         >
           <p className="text-6xl font-bold text-blue-300 mb-4">{scores[0]}</p>
           <p className="text-gray-400">Tap to add +1</p>
-          {scores[0] === 12 && <p className="text-yellow-400 text-sm mt-4 absolute bottom-4">Max reached!</p>}
+          {scores[0] === 8 && <p className="text-yellow-400 text-sm mt-4 absolute bottom-4">Max reached!</p>}
         </div>
 
         {/* Player 2 - Tap to score */}
@@ -164,7 +164,7 @@ export default function DiceGame() {
           >
             <p className="text-6xl font-bold text-purple-300 mb-4">{scores[1]}</p>
             <p className="text-gray-400">Tap to add +1</p>
-            {scores[1] === 12 && <p className="text-yellow-400 text-sm mt-4 absolute bottom-4">Max reached!</p>}
+            {scores[1] === 8 && <p className="text-yellow-400 text-sm mt-4 absolute bottom-4">Max reached!</p>}
           </div>
         )}
       </div>
