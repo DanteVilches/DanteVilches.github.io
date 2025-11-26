@@ -7,22 +7,22 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Score Tracker - Dice Game",
-  description: "Mobile score tracker with dice rolling",
+  title: "Riftbound Counter",
+  description: "Counter for RiftBound Scoring",
   generator: "v0.app",
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
+        url: "/rbicon.jpg",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/icon-dark-32x32.png",
+        url: "/rbicon.jpg",
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/icon.svg",
-        type: "image/svg+xml",
+        url: "/rbicon.jpg",
+        type: "image/jpg",
       },
     ],
     apple: "/apple-icon.png",
