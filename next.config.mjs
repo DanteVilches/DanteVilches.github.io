@@ -1,11 +1,6 @@
+import withPWA from 'next-pwa';
+
 /** @type {import('next').NextConfig} */
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  // Opciones básicas de configuración para PWA
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development', // Deshabilita PWA en desarrollo para que no cachee mientras programas
-})
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
@@ -16,5 +11,9 @@ const nextConfig = {
 }
 
 
-
-module.exports = withPWA(nextConfig)
+export default withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+})(nextConfig);
