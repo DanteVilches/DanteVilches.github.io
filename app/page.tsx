@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { RotateCcw, Dice1 as Dice12 } from "lucide-react"
+import { RotateCcw, Dice1 as Dice12, Minus } from "lucide-react"
 
 export default function DiceGame() {
   const [numPlayers, setNumPlayers] = useState(1)
@@ -27,12 +27,13 @@ export default function DiceGame() {
   }
 
   const substractScore = (playerIndex: number) => {
-     const newScores = [...scores]
-    if (newScores[playerIndex] < 12) {
+    const newScores = [...scores]
+    if (newScores[playerIndex] > 0) {
       newScores[playerIndex] -= 1
     }
     setScores(newScores)
   }
+
   const resetScores = () => {
     setScores([0, 0])
     setDiceResult(null)
@@ -40,7 +41,7 @@ export default function DiceGame() {
 
   const addScore = (playerIndex: number) => {
     const newScores = [...scores]
-    if (newScores[playerIndex] < 12) {
+    if (newScores[playerIndex] < 12) { // Asumo límite 12 según tu código anterior
       newScores[playerIndex] += 1
     }
     setScores(newScores)
@@ -89,8 +90,12 @@ export default function DiceGame() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex flex-col h-screen">
-      <div className="bg-slate-800 p-4 border-b border-slate-700 flex justify-between items-center gap-2">
-        <div className="flex gap-2 flex-1">
+      
+      {/* --- BARRA SUPERIOR (PLAYER 1 + CONTROLES) --- */}
+      <div className="bg-slate-800 p-4 border-b border-slate-700 flex justify-between items-center">
+        
+        {/* IZQUIERDA: Nombre Player 1 */}
+        <div className="flex-1 flex justify-start">
           {editingPlayer === 0 ? (
             <input
               autoFocus
@@ -99,88 +104,110 @@ export default function DiceGame() {
               onChange={(e) => setTempName(e.target.value)}
               onBlur={() => saveName(0)}
               onKeyDown={(e) => e.key === "Enter" && saveName(0)}
-              className="px-2 py-1 bg-slate-700 text-white rounded text-sm border border-blue-500"
+              className="px-2 py-1 bg-slate-700 text-white rounded text-sm border border-blue-500 w-24 sm:w-auto"
             />
           ) : (
             <button
               onClick={() => startEditingName(0, player1Name)}
-              className="px-3 py-1 text-sm text-gray-300 hover:text-white hover:bg-slate-700 rounded"
+              className="px-3 py-1 text-sm text-gray-300 hover:text-white hover:bg-slate-700 rounded text-left truncate max-w-[120px]"
             >
               {player1Name}
             </button>
           )}
-
-            <Button onClick={substractScore} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-2 text-sm">
-          <Dice12 className="w-4 h-4" />
-        </Button>
-
         </div>
 
-        <Button onClick={rollDice} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-2 text-sm">
-          <Dice12 className="w-4 h-4" />
-        </Button>
+        {/* CENTRO: Botón Restar P1 */}
+        <div className="flex justify-center px-2">
+            <Button 
+                onClick={() => substractScore(0)}
+                size="icon"
+                className="bg-slate-700 hover:bg-red-900/50 text-blue-300 hover:text-red-200 border border-slate-600 rounded-full w-10 h-10"
+            >
+                <Minus className="w-6 h-6" />
+            </Button>
+        </div>
 
-        <div className="flex gap-2">
-          <Button
-            onClick={() => setGameStarted(false)}
-            className="bg-slate-600 hover:bg-slate-500 text-white text-sm px-3 py-2"
-          >
-            Change
-          </Button>
-          <Button onClick={resetScores} size="sm" className="bg-red-600 hover:bg-red-700 text-white">
-            <RotateCcw className="w-4 h-4" />
-          </Button>
+        {/* DERECHA: Controles del Juego */}
+        <div className="flex-1 flex justify-end gap-2">
+            <Button onClick={rollDice} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-2 text-sm">
+                <Dice12 className="w-4 h-4" />
+            </Button>
+            <Button
+                onClick={() => setGameStarted(false)}
+                className="bg-slate-600 hover:bg-slate-500 text-white text-sm px-3 py-2"
+            >
+                Change
+            </Button>
+            <Button onClick={resetScores} size="sm" className="bg-red-600 hover:bg-red-700 text-white">
+                <RotateCcw className="w-4 h-4" />
+            </Button>
         </div>
       </div>
 
-      {/* Main game area - split vertically */}
+      {/* --- ÁREA PRINCIPAL DE JUEGO --- */}
       <div className="flex-1 flex flex-col">
         {/* Player 1 - Tap to score */}
         <div
-          className="flex-1 bg-gradient-to-br from-blue-900 to-blue-950 flex flex-col items-center justify-center cursor-pointer active:bg-blue-800 transition-colors"
+          className="flex-1 bg-gradient-to-br from-blue-900 to-blue-950 flex flex-col items-center justify-center cursor-pointer active:bg-blue-800 transition-colors relative"
           onClick={() => addScore(0)}
         >
           <p className="text-6xl font-bold text-blue-300 mb-4">{scores[0]}</p>
           <p className="text-gray-400">Tap to add +1</p>
-          {scores[0] === 12 && <p className="text-yellow-400 text-sm mt-2">Max reached!</p>}
+          {scores[0] === 12 && <p className="text-yellow-400 text-sm mt-4 absolute bottom-4">Max reached!</p>}
         </div>
 
         {/* Player 2 - Tap to score */}
         {numPlayers === 2 && (
           <div
-            className="flex-1 bg-gradient-to-br from-purple-900 to-purple-950 flex flex-col items-center justify-center cursor-pointer active:bg-purple-800 transition-colors"
+            className="flex-1 bg-gradient-to-br from-purple-900 to-purple-950 flex flex-col items-center justify-center cursor-pointer active:bg-purple-800 transition-colors relative"
             onClick={() => addScore(1)}
           >
             <p className="text-6xl font-bold text-purple-300 mb-4">{scores[1]}</p>
             <p className="text-gray-400">Tap to add +1</p>
-            {scores[1] === 12 && <p className="text-yellow-400 text-sm mt-2">Max reached!</p>}
+            {scores[1] === 12 && <p className="text-yellow-400 text-sm mt-4 absolute bottom-4">Max reached!</p>}
           </div>
         )}
       </div>
 
-      {/* Player 2 name edit - only visible if 2 players */}
+      {/* --- BARRA INFERIOR (SOLO PLAYER 2) --- */}
       {numPlayers === 2 && (
-        <div className="bg-slate-800 p-4 border-t border-slate-700">
-          {editingPlayer === 1 ? (
-            <input
-              autoFocus
-              type="text"
-              value={tempName}
-              onChange={(e) => setTempName(e.target.value)}
-              onBlur={() => saveName(1)}
-              onKeyDown={(e) => e.key === "Enter" && saveName(1)}
-              className="px-2 py-1 bg-slate-700 text-white rounded text-sm border border-purple-500 w-full"
-            />
-          ) : (
-            <button
-              onClick={() => startEditingName(1, player2Name)}
-              className="px-3 py-1 text-sm text-gray-300 hover:text-white hover:bg-slate-700 rounded"
-            >
-              {player2Name}
-            </button>
-          )}
+        <div className="bg-slate-800 p-4 border-t border-slate-700 flex justify-between items-center">
+          
+          {/* IZQUIERDA: Nombre Player 2 */}
+          <div className="flex-1 flex justify-start">
+            {editingPlayer === 1 ? (
+                <input
+                autoFocus
+                type="text"
+                value={tempName}
+                onChange={(e) => setTempName(e.target.value)}
+                onBlur={() => saveName(1)}
+                onKeyDown={(e) => e.key === "Enter" && saveName(1)}
+                className="px-2 py-1 bg-slate-700 text-white rounded text-sm border border-purple-500 w-24 sm:w-auto"
+                />
+            ) : (
+                <button
+                onClick={() => startEditingName(1, player2Name)}
+                className="px-3 py-1 text-sm text-gray-300 hover:text-white hover:bg-slate-700 rounded text-left truncate max-w-[120px]"
+                >
+                {player2Name}
+                </button>
+            )}
+          </div>
 
-          <Button onClick={substractScore} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-2 text-sm"></Button>
+          {/* CENTRO: Botón Restar P2 */}
+          <div className="flex justify-center px-2">
+            <Button 
+                onClick={() => substractScore(1)}
+                size="icon"
+                className="bg-slate-700 hover:bg-red-900/50 text-purple-300 hover:text-red-200 border border-slate-600 rounded-full w-10 h-10"
+            >
+                <Minus className="w-6 h-6" />
+            </Button>
+          </div>
+
+          {/* DERECHA: Espacio vacío para equilibrar (Spacer) */}
+          <div className="flex-1"></div>
         </div>
       )}
 
