@@ -26,6 +26,13 @@ export default function DiceGame() {
     setShowDiceModal(true)
   }
 
+  const substractScore = (playerIndex: number) => {
+     const newScores = [...scores]
+    if (newScores[playerIndex] < 12) {
+      newScores[playerIndex] -= 1
+    }
+    setScores(newScores)
+  }
   const resetScores = () => {
     setScores([0, 0])
     setDiceResult(null)
@@ -102,6 +109,11 @@ export default function DiceGame() {
               {player1Name}
             </button>
           )}
+
+            <Button onClick={substractScore} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-2 text-sm">
+          <Dice12 className="w-4 h-4" />
+        </Button>
+
         </div>
 
         <Button onClick={rollDice} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-2 text-sm">
@@ -167,6 +179,8 @@ export default function DiceGame() {
               {player2Name}
             </button>
           )}
+
+          <Button onClick={substractScore} className="bg-slate-700 hover:bg-slate-600 text-gray-300 px-3 py-2 text-sm"></Button>
         </div>
       )}
 
